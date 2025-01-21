@@ -37,6 +37,7 @@ def add_student(students_list,course_list):
     course_id = 1
     lastName = input('Enter Student\'s Lastname: ')
     course = input('Enter Student\'s Course: ')
+    sememster = input('Enter Semester: ')
     grade = input('Enter Student\'s Grade: ')
     
     for student in students_list:
@@ -44,10 +45,64 @@ def add_student(students_list,course_list):
         
     for course in course_list:
         course_id+=1
-        
-    students_list.append(s.Student(id,lastName,'na','na','na'))
-    course_list.append(c.Course(course.upper(),course_id,'na'))
+    
+    student = s.Student(id,lastName,'na','na','na')
+    students_list.append(student)
+    print('Student Added! You can update student information late!')
+    new_course = c.Course(course,course_id,sememster)
+    new_course.grade = grade
+    course_list.append(new_course)
+    student.add_course(course)
 
+def update_student(students_list):
+    student_id = input('Enter Student ID: ')
+    option = ''
+    for student in students_list:
+        if student.get_id() == student_id:
+            print('1. Update student lastname')
+            print('2. Update student firstname')
+            print('3. Update student phone number')
+            print('4. Update student email')
+            option = input('Enter from above list!')
+
+            if option == '1':
+                data = input('Enter new lastname: ')
+                student.set_lastname(data)
+            elif option == '2':
+                data = input('Enter new firstname: ')
+                student.set_fistname(data)
+            elif option == '3':
+                data = input('Enter new phone number: ')
+                student.set_phone(data)
+            else:
+                data = input('Enter new emai: ')
+                student.set_email(data)
+        else:
+            print('Student does not exist!')
+        
+def student_search_lastname(students_list):
+    lastname = input('Enter student lastname: ')
+    for student in students_list:
+        if lastname == student.get_lastname():
+            student.display_student()
+        else:
+            print('Student not found!')
+
+def student_search_phone(students_list):
+    phone = input('Enter student phone number: ')
+    for student in students_list:
+        if phone == student.get_phone():
+            student.display_student()
+        else:
+            print('Student not found!')
+    
+def student_course_lastname(students_list):
+    lastname = input('Enter student lastname: ')
+    for student in students_list:
+        if lastname == student.get_lastname():
+            student.display_courses()
+        else:
+            print('Student not found!')
 #END OF STUDENT OPERATIONS
 
 #START OF COURSE OPERATIONS
@@ -102,5 +157,7 @@ def main():
     list_all_courses_semester_az(course_list,'fall') #display all courses from a-z
     list_all_courses_semester_za(course_list,'fall') #display all courses from z-a
     list_all_students_alpha_za(students_list) #display all students from z-a
-    
+    add_student(students_list,course_list)
+    list_all_students(students_list) #display all students
+    student_course_lastname(students_list)
 main()
