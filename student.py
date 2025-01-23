@@ -1,6 +1,6 @@
 import course as c
 class Student:
-    course = []
+    courses = []
     def __init__(self,id,lastName,firstName,phone,email):
         self.id = id
         self.lastName = lastName
@@ -40,8 +40,8 @@ class Student:
         print(f"ID: {self.get_id()} Lastname: {self.get_lastname()} Firstname: {self.get_firstname()} Phone: {self.get_phone()} Email: {self.get_email()}")
 
     def display_courses(self):
-        for course in self.course:
-            course.display_course()
+        for each_course in self.courses:
+            each_course.display_course()
 
     def add_course(self,course):
-        self.course.append(course)
+        self.courses.append(course)

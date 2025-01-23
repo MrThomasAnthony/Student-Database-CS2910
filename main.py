@@ -40,10 +40,10 @@ def add_student(students_list,course_list):
     sememster = input('Enter Semester: ')
     grade = input('Enter Student\'s Grade: ')
     
-    for student in students_list:
+    for each_student in students_list:
         id+=1
         
-    for course in course_list:
+    for each_course in course_list:
         course_id+=1
     
     student = s.Student(id,lastName,'na','na','na')
@@ -52,7 +52,7 @@ def add_student(students_list,course_list):
     new_course = c.Course(course,course_id,sememster)
     new_course.grade = grade
     course_list.append(new_course)
-    student.add_course(course)
+    student.add_course(new_course)
 
 def update_student(students_list):
     student_id = input('Enter Student ID: ')
@@ -98,11 +98,36 @@ def student_search_phone(students_list):
     
 def student_course_lastname(students_list):
     lastname = input('Enter student lastname: ')
+    found = False
     for student in students_list:
         if lastname == student.get_lastname():
+            found = True
+            print('\n\tCOURSES(S)')
+            print('--------------------------------------------------------------------')
             student.display_courses()
         else:
+            continue
+    if found == False:
+        print('Student not found!')
+        
+def student_average_grade(students_list):
+    grades_sum = 0
+    course_count = 0
+    
+    lastname = input('Enter student lastname: ')
+    for student in students_list:
+        if lastname == student.get_lastname():
+            for each_course in student.courses:
+                course_count+=1
+                grades_sum+=each_course.grade
+            print('\n\tAVERAGE GRADE = ' + grades_sum/course_count)
+            print('--------------------------------------------------------------------')
+        else:
             print('Student not found!')
+    
+    
+        
+    
 #END OF STUDENT OPERATIONS
 
 #START OF COURSE OPERATIONS
@@ -160,4 +185,5 @@ def main():
     add_student(students_list,course_list)
     list_all_students(students_list) #display all students
     student_course_lastname(students_list)
+    student_average_grade(students_list)
 main()

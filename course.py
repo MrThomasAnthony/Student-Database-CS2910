@@ -9,4 +9,4 @@ class Course:
         return self.semester
         
     def display_course(self):
-        print(f"Name: {self.name} Code: {self.code} Semester: {self.semester}")
+        print(f"Name: {self.name} Code: {self.code} Semester: {self.semester} Grade: {self.grade}")
