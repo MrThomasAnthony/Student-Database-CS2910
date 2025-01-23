@@ -21,7 +21,7 @@ class Student:
         return self.firstName
     
     def set_firstname(self, firstName):
-        self.lastName = firstName
+        self.firstName = firstName
     
     def get_phone(self):
         return self.phone
@@ -29,7 +29,6 @@ class Student:
     def set_phone(self, phone):
         self.phone = phone
 
-    
     def get_email(self):
         return self.email
     
@@ -41,7 +40,14 @@ class Student:
 
     def display_courses(self):
         for each_course in self.courses:
-            each_course.display_course()
+            print(f"Name: {each_course.get_name()} Code: {each_course.get_code()} Semester: {each_course.get_semester()} Grade: {each_course.get_grade()}")
+
 
     def add_course(self,course):
         self.courses.append(course)
+
+    def average_grade(self):
+        grade_sum = 0
+        for each_course in self.courses:
+            grade_sum += each_course.get_grade()
+        return grade_sum/len(self.courses)
