@@ -7,7 +7,7 @@ class Student:
         self.firstName = firstName
         self.phone = phone
         self.email = email
-        self.courses = []  # Define courses as an instance attribute
+        self.courses = []
 
     def get_id(self):
         return self.id

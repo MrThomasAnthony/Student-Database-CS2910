@@ -1,10 +1,11 @@
 class Course:
-    grade = 0
+    
     def __init__(self,name,code,semester):
         self.name = name
         self.code = code
         self.semester = semester
-
+        self.grade = 0
+        
     def get_code(self):
         return self.code
 
