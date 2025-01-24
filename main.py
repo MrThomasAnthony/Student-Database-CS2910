@@ -82,7 +82,7 @@ def update_student(students_list):
     student_id = input('Enter Student ID: ')
     option = ''
 
-    student = find_student_id(students_list,int(student_id))
+    student = find_student_id(students_list,student_id)
 
     if student != None:
         print('1. Update student lastname')
@@ -107,20 +107,18 @@ def update_student(students_list):
         print('Student does not exist!')
         
 def student_search_lastname(students_list):
-    lastname = input('Enter student lastname: ')
-    for student in students_list:
-        if lastname == student.get_lastname():
-            student.display_student()
-        else:
-            print('Student not found!')
+    student = find_student(students_list,lastname = input('Enter student lastname: '))
+    if student != None:
+        student.display_student()
+    else:
+        print('Student Not Found')
 
 def student_search_phone(students_list):
-    phone = input('Enter student phone number: ')
-    for student in students_list:
-        if phone == student.get_phone():
-            student.display_student()
-        else:
-            print('Student not found!')
+    student = find_student_phone(students_list,phone = input('Enter student phone: '))
+    if student != None:
+        student.display_student()
+    else:
+        print('Student Not Found')
     
 def student_course_lastname(students_list):
     lastname = input('Enter student lastname: ')
@@ -171,6 +169,7 @@ def list_all_courses_semester(course_list, semester):
     for course in course_list:
         if course.get_semester() == semester.lower():
             course.display_course()
+    return course
 
 def list_all_courses_semester_az(course_list, semester):
     sorted_courses = sorted(course_list, key=lambda course: course.name)
@@ -215,20 +214,22 @@ def search_course_code(course_list, course_code):
         course.display_course()
 
 def add_course(students_list):
-    student_lastname = input('Enter student lastname: ')
     course_name = input('Enter course: ')
     semester = input('Enter semester: ')
 
-    student = find_student(students_list,student_lastname)
     new_course = c.Course(course_name,len(course_list)+1,semester)
-    new_course.set_grade(grade=input('Enter grade: '))
 
+    course_list.append(new_course)
+
+def course_average_semester(students_list,lastname,semester):
+    student = find_student(students_list,lastname)
     if student != None:
-        student.add_course(new_course)
-        print('Course added!')
-    else:
-        print('Student does not exist!')
-            
+        average = student.average_grade_semester(semester)
+        print('\n\tAVERAGE - SEMESTER')
+        print('--------------------------------------------------------------------')
+        print(average)
+
+
 #END OF COURSE OPERATIONS
        
 def load_grades(course_list):
@@ -241,14 +242,82 @@ def load_grades(course_list):
         
     infile.close()
 
+def menu():
+    print("-" * 50)
+    print("STUDENTS DATABASE MANAGEMENT SYSTEM.")
+    print("-" * 50)
+    print("Menu...Enter an option!")
+    print("-" * 50)
+    print("1. Add New Student")
+    print("2. Display Students")
+    print("3. Display Sorted List")
+    print("4. Display Courses")
+    print("5. Display Semester")
+    print("6. Course Code Search")
+    print("7. Last Name Search")
+    print("8. Phone Number Search")
+    print("9. Display Courses by Code")
+    print("10. Add Grade")
+    print("11. Update student Info")
+    print("12. Display Courses taken by Student")
+    print("13. Calculate Student Average grade")
+    print("14. Calculate the course Average")
+    print("15. Display Sorted Course")
+    print("16. Calculate Average by Semester ")
+    print("17. Add Course")
+    print("0. Exit")
+    print("-" * 50)
+
 def main():
     
     load_students(students_list) #load students from csv file and store in list
     load_courses(course_list) #load students from csv file and store in list
-    add_course(students_list)
-    add_course(students_list)
-    add_course(students_list)
-    student_course_lastname(students_list)
-    student_average_grade(students_list)
+    
+    while True:
+        menu()
+
+        option = input('Select operation: ')
+
+        if option == '1':
+            add_student(students_list,course_list)
+        elif option == '2':
+            list_all_students(students_list)
+        elif option == '3':
+            list_all_students_alpha_az(students_list)
+        elif option == '4':
+            list_all_courses(course_list)
+        elif option == '5':
+            list_all_courses_semester(course_list,semester=input('Enter Semester:'))
+        elif option == '6':
+            search_course_code(course_list,course_code=input('Enter Course Code:'))
+        elif option == '7':
+            student_search_lastname(students_list)
+        elif option == '8':
+            student_search_phone(students_list)
+        elif option == '9':
+            search_course_name(course_list,course_name=input('Enter Course Name: '))
+        elif option == '10':
+            continue
+        elif option == '11':
+            update_student(students_list)
+        elif option == '12':
+            student_course_lastname(students_list)
+        elif option == '13':
+            student_average_grade(students_list)
+        elif option == '14':
+            continue
+        elif option == '15':
+            list_all_courses_semester_az(course_list,semester=input('Enter Semester: '))
+        elif option == '16':
+            course_average_semester(students_list,lastname=input('Enter Lastname: '))
+        elif option == '17':
+            add_course(students_list)
+        else:
+            infile = open('students.csv','a')
+            for student in students_list:
+                infile.write(f"{student.get_id()};{student.get_lastname()};{student.get_firstname()};{student.get_phone()};{student.get_email()}\n")
+            infile.close()
+            break
+
 
 main()

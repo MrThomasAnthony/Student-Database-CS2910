@@ -36,11 +36,11 @@ class Student:
         self.email = email
 
     def display_student(self):
-        print(f"ID: {self.get_id()} Lastname: {self.get_lastname()} Firstname: {self.get_firstname()} Phone: {self.get_phone()} Email: {self.get_email()}")
+        print(f"ID: {self.get_id()} \tLastname: {self.get_lastname()} \tFirstname: {self.get_firstname()} \tPhone: {self.get_phone()} \tEmail: {self.get_email()}\n")
 
     def display_courses(self):
         for each_course in self.courses:
-            print(f"Name: {each_course.get_name()} Code: {each_course.get_code()} Semester: {each_course.get_semester()} Grade: {each_course.get_grade()}")
+            print(f"Name: {each_course.get_name()} \tCode: {each_course.get_code()} \tSemester: {each_course.get_semester()} \tGrade: {each_course.get_grade()}")
 
 
     def add_course(self,course):
@@ -50,4 +50,11 @@ class Student:
         grade_sum = 0
         for each_course in self.courses:
             grade_sum += each_course.get_grade()
+        return grade_sum/len(self.courses)
+    
+    def average_grade_semester(self, semester):
+        grade_sum = 0
+        for each_course in self.courses:
+            if each_course.get_semester() == semester:
+                grade_sum += each_course.get_grade()
         return grade_sum/len(self.courses)
