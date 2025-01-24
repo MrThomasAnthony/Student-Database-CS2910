@@ -6,36 +6,38 @@ course_list = [] #list to hold all course
 
 #START OF STUDENT OPERATIONS
 def load_students(students_list):
-    infile = open('students.csv','r')
-    students = infile.readlines()
+    infile_students = open('students.csv','r')
+    
+    students = infile_students.readlines()
     
     for line in students:
         student = line.replace(';',' ').replace('\n', '').split(' ')
         students_list.append(s.Student(student[0],student[1],student[2],student[3],student[4]))
         
-    infile.close()
-    
-def find_student(student_list,lastname):
+    infile_students.close()
+        
+
+def find_student(students_list,lastname):
     student = None
-    for learner in student_list:
+    for learner in students_list:
         if lastname == learner.lastName:
             student = learner
         else:
             continue
     return student
 
-def find_student_id(student_list,id):
+def find_student_id(students_list,id):
     student = None
-    for learner in student_list:
+    for learner in students_list:
         if id == learner.id:
             student = learner
         else:
             continue
     return student
 
-def find_student_phone(student_list,phone):
+def find_student_phone(students_list,phone):
     student = None
-    for learner in student_list:
+    for learner in students_list:
         if phone == learner.get_phone():
             student = learner
         else:
@@ -64,18 +66,21 @@ def list_all_students_alpha_za(students_list):
 
 def add_student(students_list,course_list):
     lastName = input('Enter Student\'s Lastname: ')
+    firstName = input('Enter Student\'s Firstname: ')
+    phone = input('Enter Student\'s Phone Number: ')
+    email = input('Enter Student\'s Email Address: ')
+    student = s.Student(len(students_list)+1,lastName,firstName,phone,email)
+    students_list.append(student)
+    
     course = input('Enter Student\'s Course: ')
     sememster = input('Enter Semester: ')
     grade = input('Enter Student\'s Grade: ')
-    
-    student = s.Student(len(students_list)+1,lastName,'na','na','na')
-    students_list.append(student)
-    print('Student Added! You can update student information late!')
-
     new_course = c.Course(course,len(course_list)+1,sememster)
-    new_course.grade = grade
-
+    new_course.set_grade(grade)
     course_list.append(new_course)
+    
+    print('Student Added!')
+
     student.add_course(new_course)
 
 def update_student(students_list):
@@ -210,8 +215,8 @@ def search_course_code(course_list, course_code):
     
     if course == None:
         print('Course does not exist!')
-    else:
-        course.display_course()
+        
+    return course
 
 def add_course(students_list):
     course_name = input('Enter course: ')
@@ -229,18 +234,27 @@ def course_average_semester(students_list,lastname,semester):
         print('--------------------------------------------------------------------')
         print(average)
 
-
-#END OF COURSE OPERATIONS
-       
-def load_grades(course_list):
-    infile = open('grades.csv','r')
-    grades = infile.readlines()
+def load_grades(students_list,course_list):
+    infile_grades = open('grades.csv','r')
+    grades = infile_grades.readlines()
     
-    for record in grades:
+    for line in grades:
         grade = line.replace(';',' ').replace('\n', '').split(' ')
-        students_list.append(s.Student(grade[0],grade[1],grade[2],grade[3],grade[4]))
-        
-    infile.close()
+        student = find_student(students_list,grade[1])
+        student.display_courses()
+        crse_code = 1
+        for grd in grade[3:]:
+            if grd != 'na':
+                crse = search_course_code(course_list, str(crse_code))
+                student.add_course(crse)                
+                student.get_course(crse.get_name()).set_grade(grd)
+            crse_code+=1
+        student.display_student()
+        student.display_courses()
+
+    infile_grades.close()
+    
+#END OF COURSE OPERATIONS
 
 def menu():
     print("-" * 50)
@@ -272,7 +286,7 @@ def main():
     
     load_students(students_list) #load students from csv file and store in list
     load_courses(course_list) #load students from csv file and store in list
-    
+    load_grades(students_list,course_list)
     while True:
         menu()
 
@@ -289,7 +303,7 @@ def main():
         elif option == '5':
             list_all_courses_semester(course_list,semester=input('Enter Semester:'))
         elif option == '6':
-            search_course_code(course_list,course_code=input('Enter Course Code:'))
+            search_course_code(course_list,course_code=input('Enter Course Code:')).display_course()
         elif option == '7':
             student_search_lastname(students_list)
         elif option == '8':
@@ -313,9 +327,8 @@ def main():
         elif option == '17':
             add_course(students_list)
         else:
-            infile = open('students.csv','a')
-            for student in students_list:
-                infile.write(f"{student.get_id()};{student.get_lastname()};{student.get_firstname()};{student.get_phone()};{student.get_email()}\n")
+            infile = open('students.csv','w')
+            infile.writelines(f"{student.get_id()};{student.get_lastname()};{student.get_firstname()};{student.get_phone()};{student.get_email()}\n" for student in students_list)
             infile.close()
             break
 
